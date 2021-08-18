@@ -9,8 +9,19 @@ sed '/CGIPassAuth Off/s/Off/On/g' -i.bak /opt/bitnami/apps/wordpress/conf/httpd-
 #disable Bitnami banner
 #/opt/bitnami/apps/wordpress/bnconfig --disable_banner 1
 
+#check if using System packages or self-contained version of Bitnami WordPress
+if ! [-f /opt/bitnami/common/bin/openssl]
+then
+# System A
 #enable .htaccess for Bitnami WordPress
 sed -i '/<Directory \"\/opt\/bitnami\/apps\/wordpress\/htdocs\">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /opt/bitnami/apps/wordpress/conf/httpd-app.conf
+else
+# System B (legacy)
+#enable .htaccess for Bitnami WordPress
+sed -i '/<Directory \"\/opt\/bitnami\/apps\/wordpress\/htdocs\">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /opt/bitnami/apps/wordpress/conf/httpd-app.conf
+
+fi
+
 
 
 ## TODO: Update paths in this script like it would be for new instance.
